@@ -18,6 +18,8 @@ app.get('/',(req,res)=>{
 
 
 app.use('/teamAuth',require('./routes/teamAuth'))
+app.use('/team',require('./routes/team'))
+
 
 const port = 5000 
 app.listen(port,()=>{

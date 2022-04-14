@@ -9,6 +9,12 @@ const jwt = require('jsonwebtoken')
 router.post('/register',async(req,res)=>{
     try {
         const {Role,Password,Email,Name} = req.body
+
+        const isAvailable = await Team.findOne({Email})
+
+        if(isAvailable){
+            return res.status(200).json({data:'This email is already register to team member',error:true})
+        }
         const salt = bcrypt.genSaltSync(12)
         const newPassword =  bcrypt.hashSync(Password,salt)
         const newTeamMember = new Team({
@@ -50,7 +56,7 @@ router.post('/login',async(req,res)=>{
 
         },'jwtetgdauSetgdauecrdg',{expiresIn:'7d'})
 
-        return res.status(200).json({data:{isAlreadyAvailable,token},error:false})
+        return res.status(200).json({data:{team:isAlreadyAvailable,token},error:false})
     } catch (error) {
         return res.status(200).json({data:'err: '+error,error:true})
     }
