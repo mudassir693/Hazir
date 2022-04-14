@@ -16,7 +16,10 @@ app.get('/',(req,res)=>{
     return res.status(200).json({data:'Server running sucessfully', error:false,status:200})
 })
 
+
+app.use('/teamAuth',require('./routes/teamAuth'))
+
 const port = 5000 
 app.listen(port,()=>{
-    console.log('Hazir Srever is running'+ port)
+    console.log('Hazir Srever is running '+ port)
 })
