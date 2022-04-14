@@ -1,9 +1,13 @@
 const dotenv = require('dotenv');
+dotenv.config()
+
+
 const express = require('express')
 
-
-dotenv.config()
+const DB_Connection = require('./config/dbConfig')
 const app = express()
+
+DB_Connection()
 
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
