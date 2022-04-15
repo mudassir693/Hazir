@@ -19,9 +19,9 @@ const CaptainSchema = new mongoose.Schema({
     Category:{
         type:String
     },
-    WorkHistory:{
-        type:Array
-    },
+    // WorkHistory:{
+    //     type:Array
+    // },
     Rate:{
         type:Number
     }

@@ -10,11 +10,11 @@ const UserSchema = new mongoose.Schema({
     Address:{
         type:String
     },
-    Email:{
+    PhoneNumber:{
         type:String
     },
-    WorkHistory:{
-        type:Array
+    Email:{
+        type:String
     },
 },{
     timestamps:true

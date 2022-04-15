@@ -19,6 +19,9 @@ app.get('/',(req,res)=>{
 
 app.use('/teamAuth',require('./routes/teamAuth'))
 app.use('/team',require('./routes/team'))
+app.use('/userAuth',require('./routes/userAuth'))
+app.use('/user',require('./routes/user'))
+
 
 
 const port = 5000 
