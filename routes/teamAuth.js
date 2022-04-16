@@ -53,7 +53,7 @@ router.post('/login',async(req,res)=>{
         const token = jwt.sign({
             id:isAlreadyAvailable._id,
             from:'Team',
-            Role:''
+            Role:isAlreadyAvailable.Role
 
         },'jwtetgdauSetgdauecrdg',{expiresIn:'7d'})
 

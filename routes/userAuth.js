@@ -42,7 +42,7 @@ router.post('/login',async(req,res)=>{
         const token = jwt.sign({
             id:userAlreadyExist._id,
             from:'User',
-            Role:'null'
+            Role:''
         },'jwtetgdauSetgdauecrdg',{expiresIn:'7d'})
 
         return res.status(200).json({data:{user:userAlreadyExist,token},error:false})

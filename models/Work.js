@@ -12,6 +12,9 @@ const WorkSchema = new mongoose.Schema({
     },
     Bill:{
         type:Number
+    },
+    Rate:{
+        type:Number
     }
 },{
     timestamps:true

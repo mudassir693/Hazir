@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 
 const CaptainSchema = new mongoose.Schema({
     Name:{
-        Type:String,
+        type:String,
     },
     PhoneNumber:{
-        Type:String,
+        type:String,
     },
     Email:{
         type:String
@@ -22,9 +22,9 @@ const CaptainSchema = new mongoose.Schema({
     // WorkHistory:{
     //     type:Array
     // },
-    Rate:{
-        type:Number
-    }
+    // Rate:{
+    //     type:Number
+    // }
 },{
     timestamps:true
 })

@@ -21,6 +21,8 @@ app.use('/teamAuth',require('./routes/teamAuth'))
 app.use('/team',require('./routes/team'))
 app.use('/userAuth',require('./routes/userAuth'))
 app.use('/user',require('./routes/user'))
+app.use('/captainAuth',require('./routes/captianAuth'))
+app.use('/captain',require('./routes/captain'))
 
 
 
