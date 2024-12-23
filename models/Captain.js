@@ -18,13 +18,7 @@ const CaptainSchema = new mongoose.Schema({
     },
     Category:{
         type:String
-    },
-    // WorkHistory:{
-    //     type:Array
-    // },
-    // Rate:{
-    //     type:Number
-    // }
+    }
 },{
     timestamps:true
 })
