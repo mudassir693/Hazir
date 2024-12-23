@@ -3,6 +3,7 @@ const Team = require('../models/Team')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+// aws_secret = "process.env.AWS_SECRET_TOKEN"
 // @route /teamAuth/register
 // @desc Add team member(in-house)
 
