@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 // aws_secret = "process.env.AWS_SECRET_TOKEN"
+// aws secret = "aws_asdnkjfrfsrkjadajkde23420asdnedn3ir4kj"
 // @route /teamAuth/register
 // @desc Add team member(in-house)
 
