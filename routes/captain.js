@@ -1,77 +1,77 @@
 const Captain = require('../models/Captain');
-const bcrypt = require('bcryptjs')
-
+const bcrypt = require('bcryptjs');
 const router = require('express').Router();
 
-// @route /captain/getAll
-// @desc get all captain members
-
-router.get('/getAll',async(req,res)=>{
+// @route   GET /captain/getAll
+// @desc    Get all captain members
+router.get('/getAll', async (req, res) => {
     try {
-        const resp = await Captain.find()
-        
-        return res.status(200).json({data:resp,error:false})
+        const captains = await Captain.find();
+        return res.status(200).json({ data: captains, error: false });
     } catch (error) {
-        return res.status(200).json({data:error,error:true})
+        console.error(error);
+        return res.status(500).json({ data: 'An error occurred while fetching captains.', error: true });
     }
-})
+});
 
-
-// @route /captain/getById/:id
-// @desc get By id
-
-router.get('/getById/:id',async(req,res)=>{
+// @route   GET /captain/getById/:id
+// @desc    Get a captain by ID
+router.get('/getById/:id', async (req, res) => {
+    const { id } = req.params;
     try {
-        const resp = await Captain.findById(req.params.id)
+        const captain = await Captain.findById(id);
 
-        if(!resp){
-            return res.status(400).json({data:'No record with this Id',error:true})
-        }
-        
-        return res.status(200).json({data:resp,error:false})
-    } catch (error) {
-        return res.status(200).json({data:error,error:true})
-    }
-})
-
-
-// @route /captain/update/:id
-// @desc update member
-
-router.put('/update/:id',async(req,res)=>{
-    try {
-        const {PhoneNumber,...others} = req.body
-
-        const isAvailable = await Captain.findById(req.params.id)
-
-        if(!isAvailable){
-            return res.status(200).json({data:'invalid request',error:true})
+        if (!captain) {
+            return res.status(404).json({ data: 'No record with this ID.', error: true });
         }
 
-        const updResp = await Captain.findByIdAndUpdate(req.params.id,{$set:others},{new:true})
-
-        return res.status(200).json({data:updResp,error:false})        
+        return res.status(200).json({ data: captain, error: false });
     } catch (error) {
-        return res.status(200).json({data:error,error:true})
+        console.error(error);
+        return res.status(500).json({ data: 'An error occurred while fetching the captain.', error: true });
     }
-})
+});
 
+// @route   PUT /captain/update/:id
+// @desc    Update a captain member
+router.put('/update/:id', async (req, res) => {
+    const { id } = req.params;
+    const { PhoneNumber, ...updateData } = req.body; // Ensure you exclude any unwanted fields like PhoneNumber, if necessary
 
-// @route /captain/delete/:id
-// @desc delete member
-
-router.delete('/delete/:id',async(req,res)=>{
     try {
-        const isAvailable = await Captain.findById(req.params.id)
+        const captain = await Captain.findById(id);
 
-        if(!isAvailable){
-            return res.status(200).json({data:'invalid request',error:true})
+        if (!captain) {
+            return res.status(404).json({ data: 'Captain not found for this ID.', error: true });
         }
 
-        const delResp = await Captain.findByIdAndRemove(req.params.id)
-        return res.status(200).json({data:delResp,error:false})
+        const updatedCaptain = await Captain.findByIdAndUpdate(id, { $set: updateData }, { new: true });
+
+        return res.status(200).json({ data: updatedCaptain, error: false });
     } catch (error) {
-        return res.status(200).json({data:error,error:true})
+        console.error(error);
+        return res.status(500).json({ data: 'An error occurred while updating the captain.', error: true });
     }
-})
-module.exports = router
+});
+
+// @route   DELETE /captain/delete/:id
+// @desc    Delete a captain member
+router.delete('/delete/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const captain = await Captain.findById(id);
+
+        if (!captain) {
+            return res.status(404).json({ data: 'Captain not found for this ID.', error: true });
+        }
+
+        const deletedCaptain = await Captain.findByIdAndRemove(id);
+
+        return res.status(200).json({ data: deletedCaptain, error: false });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ data: 'An error occurred while deleting the captain.', error: true });
+    }
+});
+
+module.exports = router;
