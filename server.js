@@ -7,6 +7,8 @@ const helmet = require('helmet'); // For security headers
 const morgan = require('morgan'); // For logging requests
 const cors = require('cors'); // For cross-origin requests handling
 
+let unUsedVar = ""
+
 const DB_Connection = require('./config/dbConfig');
 const app = express();
 
