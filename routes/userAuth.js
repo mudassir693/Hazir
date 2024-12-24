@@ -1,54 +1,82 @@
 const router = require('express').Router()
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs') // If passwords were needed in future
+const Joi = require('joi') // Validation
+
+// Environment variables for JWT secret
+const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
 
 // @route /userAuth/register
-// @desc add User
-
-router.post('/register',async(req,res)=>{
+// @desc Register a new user
+router.post('/register', async (req, res) => {
     try {
-        const {Name,Address,PhoneNumber,Email} = req.body
+        // Validate incoming data
+        const schema = Joi.object({
+            Name: Joi.string().min(3).required(),
+            Address: Joi.string().required(),
+            PhoneNumber: Joi.string().min(10).max(15).required(),
+            Email: Joi.string().email().required(),
+        });
 
-        const userAlreadyExist = await User.findOne({PhoneNumber})
-        if(userAlreadyExist){
-            return res.status(404).json({data:'this phone number alredy in use',error:true})
+        const { error } = schema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ data: error.details[0].message, error: true });
         }
 
-        const newUser = new User({
-            Name,
-            Address,
-            PhoneNumber,
-            Email
-        })
-        const respUser = await newUser.save()
-        return res.status(200).json({data:respUser,error:false})
+        const { Name, Address, PhoneNumber, Email } = req.body;
+
+        // Check if phone number already exists
+        const userAlreadyExist = await User.findOne({ PhoneNumber });
+        if (userAlreadyExist) {
+            return res.status(409).json({ data: 'This phone number is already in use', error: true });
+        }
+
+        // Create a new user
+        const newUser = new User({ Name, Address, PhoneNumber, Email });
+        const savedUser = await newUser.save();
+
+        return res.status(201).json({ data: savedUser, error: false });
     } catch (error) {
-        return res.status(500).json({data:error,error:true})
+        console.error(error);
+        return res.status(500).json({ data: 'Internal server error', error: true });
     }
-})
+});
 
 // @route /userAuth/login
-// @desc login user
-
-router.post('/login',async(req,res)=>{
+// @desc Login a user
+router.post('/login', async (req, res) => {
     try {
-        const {PhoneNumber} = req.body
+        // Validate incoming data
+        const schema = Joi.object({
+            PhoneNumber: Joi.string().min(10).max(15).required(),
+        });
 
-        const userAlreadyExist = await User.findOne({PhoneNumber})
-        if(!userAlreadyExist){
-            return res.status(404).json({data:'this phone number is not registered yet...',error:true})
+        const { error } = schema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ data: error.details[0].message, error: true });
         }
 
-        const token = jwt.sign({
-            id:userAlreadyExist._id,
-            from:'User',
-            Role:''
-        },'jwtetgdauSetgdauecrdg',{expiresIn:'7d'})
+        const { PhoneNumber } = req.body;
 
-        return res.status(200).json({data:{user:userAlreadyExist,token},error:false})
+        // Find user by phone number
+        const user = await User.findOne({ PhoneNumber });
+        if (!user) {
+            return res.status(404).json({ data: 'This phone number is not registered yet', error: true });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { id: user._id, from: 'User', Role: '' },
+            JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        return res.status(200).json({ data: { user, token }, error: false });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({data:error,error:true})
+        console.error(error);
+        return res.status(500).json({ data: 'Internal server error', error: true });
     }
-})
-module.exports = router
+});
+
+module.exports = router;
