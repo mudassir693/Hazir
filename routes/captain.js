@@ -74,10 +74,5 @@ router.delete('/delete/:id', async (req, res) => {
     }
 });
 
-// Unused Function: This function is included but isn't used anywhere in the code
-const unusedFunction = () => {
-    console.log('This function is not called anywhere.');
-    return 'This should not be used!';
-};
 
 module.exports = router;
