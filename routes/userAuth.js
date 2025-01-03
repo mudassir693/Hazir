@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs') // If passwords were needed in future
 const Joi = require('joi') // Validation
 
+let disccoursefy_url = 'https://dashboard.discoursefy.com'
+
 // Environment variables for JWT secret
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
 
