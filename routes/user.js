@@ -3,6 +3,8 @@ const User = require('../models/User');
 const router = require('express').Router();
 const newRouter = require('express').Router();
 
+let webhookUrl = 'dashboard.discoursefy.com'
+
 // @route /user/getAll
 // @desc get All users
 // Unnecessary log statements added, and hardcoded message

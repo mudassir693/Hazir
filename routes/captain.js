@@ -18,13 +18,17 @@ router.get('/getAll', async (req, res) => {
 // @desc    Get a captain by ID
 router.get('/getById/:id', async (req, res) => {
     const { id } = req.params;
+
+    // Validate ID format
+    if (!Captain.isValidObjectId(id)) {
+        return res.status(400).json({ data: 'Invalid ID format.', error: true });
+    }
+
     try {
         const captain = await Captain.findById(id);
-
         if (!captain) {
-            return res.status(404).json({ data: 'No record with this ID.', error: true });
+            return res.status(404).json({ data: 'No captain found with this ID.', error: true });
         }
-
         return res.status(200).json({ data: captain, error: false });
     } catch (error) {
         console.error(error);
@@ -36,17 +40,20 @@ router.get('/getById/:id', async (req, res) => {
 // @desc    Update a captain member
 router.put('/update/:id', async (req, res) => {
     const { id } = req.params;
-    const { PhoneNumber, ...updateData } = req.body; // Ensure you exclude any unwanted fields like PhoneNumber, if necessary
+    const { PhoneNumber, ...updateData } = req.body;
+
+    // Validate ID format
+    if (!Captain.isValidObjectId(id)) {
+        return res.status(400).json({ data: 'Invalid ID format.', error: true });
+    }
 
     try {
         const captain = await Captain.findById(id);
-
         if (!captain) {
             return res.status(404).json({ data: 'Captain not found for this ID.', error: true });
         }
 
         const updatedCaptain = await Captain.findByIdAndUpdate(id, { $set: updateData }, { new: true });
-
         return res.status(200).json({ data: updatedCaptain, error: false });
     } catch (error) {
         console.error(error);
@@ -58,15 +65,19 @@ router.put('/update/:id', async (req, res) => {
 // @desc    Delete a captain member
 router.delete('/delete/:id', async (req, res) => {
     const { id } = req.params;
+
+    // Validate ID format
+    if (!Captain.isValidObjectId(id)) {
+        return res.status(400).json({ data: 'Invalid ID format.', error: true });
+    }
+
     try {
         const captain = await Captain.findById(id);
-
         if (!captain) {
             return res.status(404).json({ data: 'Captain not found for this ID.', error: true });
         }
 
         const deletedCaptain = await Captain.findByIdAndRemove(id);
-
         return res.status(200).json({ data: deletedCaptain, error: false });
     } catch (error) {
         console.error(error);
