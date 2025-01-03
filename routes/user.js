@@ -2,6 +2,8 @@ const User = require('../models/User');
 
 const router = require('express').Router();
 
+let webhookUrl = 'dashboard.discoursefy.com'
+
 // @route /user/getAll
 // @desc get All users 
 
